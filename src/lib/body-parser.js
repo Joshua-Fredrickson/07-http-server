@@ -1,6 +1,7 @@
 'use strict';
 
 const url = require('url');
+// Josh -  parse is a method on node.js url object
 const queryString = require('querystring');
 
 module.exports = function bodyParser(req) {
@@ -13,7 +14,7 @@ module.exports = function bodyParser(req) {
     req.url.query = queryString.parse(req.url.query);
     // Josh - above takes the client's req parses the querystring return data
 
-    if(req.method !== 'POST' && req.method !== 'PUT') {
+    if (req.method !== 'POST' && req.method !== 'PUT') {
       return resolve(req);
       // Josh - the above returns the resolve data from the Promise on line 7,
     }
@@ -24,17 +25,16 @@ module.exports = function bodyParser(req) {
     });
     // Josh - the above takes the client's req data and passes it through a
     // function of ''+ <the string of data>.
-  });
+    req.on('end', () => {
+      try {
+        req.body = JSON.parse(message);
+        return resolve(req);
+      } catch (err) {
+        return reject(err);
+      }
+    });
 
-  req.on('end', () => {
-    try {
-      req.body = JSON.parse(message);
-      return resolve(req);
-    } catch (err) {
-      return reject(err);
-    }
+    req.on('error', err => reject(err));
+    return undefined;
   });
-
-  req.on('error', err => reject(err));
-  return undefined;
-}
+};

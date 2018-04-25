@@ -6,7 +6,8 @@
   "scripts": {
     "lint": "eslint .",
     "test": "jest --coverage",
-    "start": "node index.js"
+    "start": "nodemon main.js",
+    "watchAll": "jest --coverage --watchAll"
   },
   "keywords": [],
   "author": "",
@@ -26,6 +27,8 @@
     "dotenv": "^5.0.1",
     "faker": "^4.1.0",
     "http": "0.0.0",
+    "nodemon": "^1.17.3",
+    "superagent": "^3.8.2",
     "winston": "^3.0.0-rc5"
   }
 }
